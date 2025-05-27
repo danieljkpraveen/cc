@@ -5,7 +5,7 @@ class UploadExcelModel(models.Model):
     """
     Model to store uploaded Excel files.
     """
-    file = models.FileField(upload_to='static/excel/')
+    file = models.FileField(upload_to='uploads/excel/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -16,7 +16,7 @@ class UploadEMLModel(models.Model):
     """
     Model to store uploaded EML files.
     """
-    file = models.FileField(upload_to='static/eml/')
+    file = models.FileField(upload_to='uploads/eml/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
