@@ -1,10 +1,26 @@
+from .utils import (
+    extract_email_body,
+    extract_rules,
+    create_panos_connection
+)
+from .forms import (
+    UploadExcelForm,
+    UploadEMLForm,
+    FirewallConnectForm,
+    VersionSelectForm,
+    ConfigUploadForm
+)
 import os
 import csv
 from datetime import datetime
+import xml.etree.ElementTree as ET
+import tempfile
+
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import UploadExcelForm, UploadEMLForm
-from .utils import extract_email_body, extract_rules
+from panos.updater import SoftwareUpdater
+
+from .models import FirewallCredential
 
 
 def index(request):
@@ -14,6 +30,7 @@ def index(request):
     return render(request, 'index.html')
 
 
+############## _____Automation Views_____##############
 def eml_to_csv(request):
     """
     Handle EML file upload.
@@ -33,7 +50,7 @@ def eml_to_csv(request):
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = f'attachment; filename="{filename}"'
             writer = csv.writer(response)
-            writer.writerow(['Rule Description', 'Values'])
+            writer.writerow(['Tasks', 'Results'])
             for row in rules:
                 writer.writerow([row[0], ', '.join(row[1:])])
 
@@ -44,3 +61,61 @@ def eml_to_csv(request):
     else:
         form = UploadEMLForm()
     return render(request, 'core/eml_to_csv.html', {'form': form})
+
+
+############## _____Network Management Views_____##############
+def check_firewall_connection(request):
+    """
+    Handle firewall connection form submission.
+    """
+    if request.method == 'POST':
+        fw = create_panos_connection(request)
+        return render(request, 'core/firewall_connection.html', {'firewall': fw})
+    else:
+        form = FirewallConnectForm()
+    return render(request, 'core/firewall_connection.html', {'form': form})
+
+
+def connect_and_fetch_panos_version(request):
+    """
+    Connect to the PAN-OS device and fetch the version.
+    """
+    if request.method == 'POST':
+        global HOSTNAME, PASSWORD, USERNAME, API_KEY
+        if request.POST.get('version'):
+            print(f"Host: {HOSTNAME}")
+            version = request.POST.get('version')
+            # print(
+            #     f"Selected PAN-OS version: {version}\nFirewall host: {FW.host}")
+            return render(request, 'core/panos_versions.html')
+        fw = create_panos_connection(request)
+        fw_credential = FirewallCredential(
+            host=request.POST.get('host'),
+            username=request.POST.get('username'),
+            password=request.POST.get('password'),
+            api_key=request.POST.get('api_key')
+        )
+        fw_credential.save()
+
+        software_info = fw.op("request system software info", xml=True)
+
+        info_tree = ET.fromstring(software_info)
+        versions = []
+        for entry in info_tree.findall(".//entry"):
+            version = entry.find("version").text
+            # downloaded = entry.find("downloaded").text
+            # versions.append((version, downloaded))
+            versions.append(version)
+        return render(request, 'core/panos_versions.html', {'versions': versions})
+    else:
+        form = FirewallConnectForm()
+    return render(request, 'core/panos_versions.html', {'form': form})
+
+
+# def install_selected_version(request):
+#     """
+#     Install the selected PAN-OS version.
+#     """
+#     if request.method == 'POST':
+#         version = request.POST.get('version')
+#         fw = create_panos_connection(request)

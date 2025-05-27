@@ -5,10 +5,146 @@
 
 {% block content %}
 
-    <div class="container">
-        <h1 class="text-center my-4">Comand Center</h1>
-        <div class="text-center my-3">
-            <a href="{% url 'eml_to_csv' %}" class="btn btn-info">EML to CSV</a>
+<div class="container">
+    <h1 class="text-center my-4" style="color: #fff; font-weight: 700;">Command Center</h1>
+    <div class="row justify-content-center">
+        <!-- Automation Category -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header glass-header">
+                    <h4 class="mb-0 glass-header-title">Automation</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Email Automation Subcategory -->
+                    <div class="mb-3">
+                        <h5 class="subcategory-title email-subcategory" data-bs-toggle="collapse" data-bs-target="#emailSubcategory" aria-expanded="false" aria-controls="emailSubcategory">
+                            Email
+                        </h5>
+                        <div id="emailSubcategory" class="collapse">
+                            <div class="d-flex flex-column gap-2 mb-2">
+                                <a href="{% url 'eml_to_csv' %}" class="btn btn-outline-email btn-sm">EML to CSV</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Network Management Category -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header glass-header">
+                    <h4 class="mb-0 glass-header-title">Network Management</h4>
+                </div>
+                <div class="card-body">
+                    <!-- PaloAlto Subcategory -->
+                    <div class="mb-3">
+                        <h5 class="subcategory-title paloalto-subcategory" data-bs-toggle="collapse" data-bs-target="#paloaltoSubcategory" aria-expanded="false" aria-controls="paloaltoSubcategory">
+                            PaloAlto
+                        </h5>
+                        <div id="paloaltoSubcategory" class="collapse">
+                            <div class="d-flex flex-column gap-2 mb-2">
+                                <a href="#" class="btn btn-outline-paloalto btn-sm">Upgrade PanOS</a>
+                                <a href="#" class="btn btn-outline-paloalto btn-sm">Fetch FireWall Logs</a>
+                                <a href="#" class="btn btn-outline-paloalto btn-sm">Create Security Policy</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cisco Subcategory -->
+                    <div class="mb-3">
+                        <h5 class="subcategory-title cisco-subcategory" data-bs-toggle="collapse" data-bs-target="#ciscoSubcategory" aria-expanded="false" aria-controls="ciscoSubcategory">
+                            Cisco
+                        </h5>
+                        <div id="ciscoSubcategory" class="collapse">
+                            <span class="text-muted">No tools available yet.</span>
+                        </div>
+                    </div>
+                    <!-- Fortinet Subcategory -->
+                    <div class="mb-3">
+                        <h5 class="subcategory-title fortinet-subcategory" data-bs-toggle="collapse" data-bs-target="#fortinetSubcategory" aria-expanded="false" aria-controls="fortinetSubcategory">
+                            Fortinet
+                        </h5>
+                        <div id="fortinetSubcategory" class="collapse">
+                            <span class="text-muted">No tools available yet.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<style>
+    .glass-header {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(6px);
+        border-bottom: none;
+        border-radius: 1rem 1rem 0 0;
+        box-shadow: none;
+    }
+    .glass-header-title {
+        color: #22223b;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .card {
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.10);
+        backdrop-filter: blur(2px);
+    }
+    .subcategory-title {
+        font-size: 1.15rem;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: inherit;
+        cursor: pointer;
+    }
+    .email-subcategory { color: #00796b; }
+    .paloalto-subcategory { color: #6a1b9a; }
+    .cisco-subcategory { color: #c62828; }
+    .fortinet-subcategory { color: #ffa000; }
+    .btn-outline-email {
+        color: #00796b;
+        border-color: #00796b;
+    }
+    .btn-outline-email:hover, .btn-outline-email:focus {
+        background-color: #00796b;
+        color: #fff;
+        border-color: #00796b;
+    }
+    .btn-outline-paloalto {
+        color: #6a1b9a;
+        border-color: #6a1b9a;
+    }
+    .btn-outline-paloalto:hover, .btn-outline-paloalto:focus {
+        background-color: #6a1b9a;
+        color: #fff;
+        border-color: #6a1b9a;
+    }
+    .btn-outline-cisco {
+        color: #c62828;
+        border-color: #c62828;
+    }
+    .btn-outline-cisco:hover, .btn-outline-cisco:focus {
+        background-color: #c62828;
+        color: #fff;
+        border-color: #c62828;
+    }
+    .btn-outline-fortinet {
+        color: #ffa000;
+        border-color: #ffa000;
+    }
+    .btn-outline-fortinet:hover, .btn-outline-fortinet:focus {
+        background-color: #ffa000;
+        color: #fff;
+        border-color: #ffa000;
+    }
+</style>
+
 {% endblock content %}

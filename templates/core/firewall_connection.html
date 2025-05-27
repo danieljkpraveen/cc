@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Firewall Connection | {% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center my-4" style="color: #fff; font-weight: 700;">Test firewall connection</h2>
+    <div class="row justify-content-center">
+        <div class="card-container">
+            <div class="card firewall-card glass-card">
+            {% if error %}
+                <div class="alert alert-danger" style="color: #b71c1c; background: #ffebee; border-radius: 5px; padding: 10px; margin-bottom: 1rem;">
+                {{ error }}
+                </div>
+            {% endif %}
+
+            {% if firewall %}
+                <div class="alert alert-success" style="color: #1b5e20; background: #e8f5e9; border-radius: 5px; padding: 10px; margin-bottom: 1rem;">
+                <p><strong>Connected successfully!</strong></p>
+                </div>
+                <ul class="fw-details">
+                <li><strong>Hostname:</strong> {{ firewall.hostname }}</li>
+                <li><strong>Serial:</strong> {{ firewall.serial }}</li>
+                <li><strong>Model:</strong> {{ firewall.model }}</li>
+                <li><strong>Software Version:</strong> {{ firewall.version }}</li>
+                </ul>
+            {% else %}
+                <form method="post" class="fw-form">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Connect</button>
+                </form>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Add extra space at the bottom -->
+    <div style="height: 60px;"></div>
+</div>
+
+  <style>
+    body {
+      /* Ensure the background gradient covers the whole viewport */
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #26c6da 0%, #8e24aa 100%);
+    }
+    .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 70vh;
+      /* Add margin-bottom for extra space below the card */
+      margin-bottom: 60px;
+    }
+    .card.firewall-card.glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto;
+      transition: box-shadow 0.2s;
+    }
+    .card.firewall-card.glass-card:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .fw-details {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0 0 0;
+      color: #222;
+    }
+    .fw-details li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      font-size: 1.08rem;
+    }
+    .fw-details li:last-child {
+      border-bottom: none;
+    }
+    .fw-form .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #2196f3 0%, #e040fb 100%);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #1976d2 0%, #ad1457 100%);
+    }
+    /* Make form labels and inputs more visible on glass */
+    .glass-card label {
+      color: #fff !important;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .glass-card input, .glass-card select, .glass-card textarea {
+      background: rgba(255,255,255,0.45) !important;
+      color: #222 !important;
+      border-radius: 8px !important;
+      border: 1px solid #e0e0e0 !important;
+    }
+    .glass-card input:focus, .glass-card select:focus, .glass-card textarea:focus {
+      background: rgba(255,255,255,0.7) !important;
+      outline: none;
+      border-color: #90caf9 !important;
+    }
+  </style>
+{% endblock %}

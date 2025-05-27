@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Eml to CSV{% endblock title %}
+{% block title %}Eml to CSV | {% endblock title %}
 
 {% block content %}
 
@@ -12,9 +12,8 @@
             {% csrf_token %}
             {{ form|crispy }}
             <div class="text-center">
-                <button class="btn btn-secondary" type="submit">Submit</button>
+                <button class="btn btn-outline-info" type="submit">Submit</button>
             </div>
-
         </form>
     </div>
 </div>
@@ -24,3 +23,15 @@
 {% block extra_js %}
     {{ form.media }}
 {% endblock extra_js %}
+
+<style>
+    .btn-outline-email {
+        color: #00796b;
+        border-color: #00796b;
+    }
+    .btn-outline-email:hover, .btn-outline-email:focus {
+        background-color: #00796b;
+        color: #fff;
+        border-color: #00796b;
+    }
+</style>
