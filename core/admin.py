@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import UploadExcelModel, UploadEMLModel
+from .models import (
+    FirewallCredential
+)
 
 
-admin.site.register(UploadExcelModel)
-admin.site.register(UploadEMLModel)
+admin.site.register(FirewallCredential)

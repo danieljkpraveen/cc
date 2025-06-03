@@ -2,28 +2,6 @@ from django.db import models
 from cryptography.fernet import Fernet
 
 
-class UploadExcelModel(models.Model):
-    """
-    Model to store uploaded Excel files.
-    """
-    file = models.FileField(upload_to='uploads/excel/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Excel File: {self.file.name} uploaded at {self.uploaded_at}"
-
-
-class UploadEMLModel(models.Model):
-    """
-    Model to store uploaded EML files.
-    """
-    file = models.FileField(upload_to='uploads/eml/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"EML File: {self.file.name} uploaded at {self.uploaded_at}"
-
-
 class FirewallCredential(models.Model):
     """
     Model to store firewall connection credentials.
@@ -36,14 +14,21 @@ class FirewallCredential(models.Model):
     def save(self, *args, **kwargs):
         self.key = Fernet.generate_key().decode()
         cipher_suite = Fernet(self.key.encode())
-        cipher_text = cipher_suite.encrypt(self.password.encode())
-        self.password = cipher_text.decode()
+        cipher_text_pass = cipher_suite.encrypt(self.password.encode())
+        cipher_text_api = cipher_suite.encrypt(self.api_key.encode())
+        self.password = cipher_text_pass.decode()
+        self.api_key = cipher_text_api.decode()
 
         super().save(*args, **kwargs)
 
     def decrypt_password(self):
         cipher_suite = Fernet(self.key.encode())
         plain_text = cipher_suite.decrypt(self.password.encode())
+        return plain_text.decode()
+
+    def decrypt_api_key(self):
+        cipher_suite = Fernet(self.key.encode())
+        plain_text = cipher_suite.decrypt(self.api_key.encode())
         return plain_text.decode()
 
     def __str__(self):
